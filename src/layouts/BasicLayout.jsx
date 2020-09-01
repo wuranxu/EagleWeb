@@ -40,7 +40,7 @@ const menuDataRender = (menuList) =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright={`${new Date().getFullYear()} 蚂蚁集团体验技术部出品`}
+    copyright={`${new Date().getFullYear()}  🎉 created by wuranxu❤️`}
     links={[
       {
         key: 'Eagle',
