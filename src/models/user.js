@@ -14,10 +14,16 @@ const UserModel = {
     },
 
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const user = localStorage.getItem("eagle_user");
+      if (user === undefined) {
+        yield put({
+          type: 'login/logout'
+        })
+      }
+      const userInfo = JSON.parse(user)
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: userInfo,
       });
     },
   },

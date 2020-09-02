@@ -50,6 +50,9 @@ const errorHandler = (error) => {
 
 const request = extend({
   errorHandler,
+  headers: {
+    token: localStorage.getItem("eagle_token"),
+  },
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
