@@ -1,12 +1,13 @@
 import * as projectService from '@/services/project';
 import validResponse from "@/utils/response";
-import {message, notification} from "antd";
+import {notification} from "antd";
 
 export default {
   namespace: 'project',
   state: {
     data: [],
     projectName: '',
+    visible: false,
   },
 
   reducers: {
@@ -25,16 +26,33 @@ export default {
         yield put({
           type: 'save',
           payload: {
-            data: response.data.records
+            data: response.data.records,
+            visible: false,
+            projectName: '',
           }
         })
       }
     },
+
+    *insert({payload}, {call, put, select}) {
+      const response = yield call(projectService.insertProject, payload);
+      if (validResponse(response)) {
+        notification.success({message: response.message});
+        yield put({
+          type: 'fetch',
+          payload: {
+          }
+        })
+      }
+
+    },
+
     * uploadFile({payload}, {call, put}) {
       const response = yield call(projectService.uploadProject, payload);
       if (validResponse(response)) {
         notification.success({
-          message: response.message
+          message: response.message,
+          description: '由于缓存原因, 请稍候查看头像变化'
         })
       }
     },

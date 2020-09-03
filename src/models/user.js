@@ -1,15 +1,22 @@
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { fetchUserList } from '@/services/user';
 const UserModel = {
   namespace: 'user',
   state: {
     currentUser: {},
+    users: [],
   },
   effects: {
     *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
+      const response = yield call(fetchUserList);
+      const u = response.data.map(v => ({
+        value: v.id,
+        label: v.nickname
+      }));
       yield put({
         type: 'save',
-        payload: response,
+        payload: {
+          users: u
+        },
       });
     },
 
@@ -30,6 +37,13 @@ const UserModel = {
   reducers: {
     saveCurrentUser(state, action) {
       return { ...state, currentUser: action.payload || {} };
+    },
+
+    save(state, {payload}) {
+      return {
+        ...state,
+        ...payload,
+      }
     },
 
     changeNotifyCount(

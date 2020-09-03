@@ -57,3 +57,10 @@ export const getRouteAuthority = (path, routeData) => {
   });
   return authorities;
 };
+
+export function getHeader() {
+  return {
+    token: localStorage.getItem('eagle_token')
+  }
+}
+

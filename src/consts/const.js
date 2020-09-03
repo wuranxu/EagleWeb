@@ -1,3 +1,3 @@
 export default {
-  PIC_URL: "http://cdn.kiin.top/"
+  PIC_URL: "http://cdn.kiin.top/",
 }
