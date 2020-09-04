@@ -13,7 +13,7 @@ export async function getFakeCaptcha(mobile) {
 
 
 export async function login(params) {
-  return request('http://127.0.0.1:7560/api/user/login', {
+  return request('/api/user/login', {
     method: 'POST',
     data: params,
   });

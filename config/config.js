@@ -7,6 +7,9 @@ const {REACT_APP_ENV} = process.env;
 export default defineConfig({
   hash: true,
   antd: {},
+  history: {
+    type: 'hash',
+  },
   dva: {
     hmr: true,
   },
@@ -53,7 +56,13 @@ export default defineConfig({
               path: '/project',
               name: '项目管理',
               icon: 'book',
-              component: './project/Project'
+              component: './project/Project',
+            },
+            {
+              path: '/project/:id',
+              icon: 'smile',
+              hideInMenu: true,
+              component: './project/ProjectDetail',
             },
             {
               path: '/welcome',
@@ -66,14 +75,14 @@ export default defineConfig({
               name: 'admin',
               icon: 'crown',
               component: './Admin',
-              authority: ['admin'],
+              authority: ['SuperAdmin'],
               routes: [
                 {
                   path: '/admin/sub-page',
                   name: 'sub-page',
                   icon: 'smile',
                   component: './Welcome',
-                  authority: ['admin'],
+                  authority: ['SuperAdmin'],
                 },
               ],
             },

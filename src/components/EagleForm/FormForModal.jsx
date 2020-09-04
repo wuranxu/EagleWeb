@@ -1,25 +1,10 @@
-import React, {PureComponent} from "react";
-import {Modal, Select, Button, Input, Form} from "antd";
+import React from "react";
+import {Form, Modal} from "antd";
+import getComponent from './index';
 
+const {FormItem} = Form;
 
-const {TextArea} = Input;
-const FormItem = Form.Item;
-
-const getComponent = (type, placeholder, component = undefined) => {
-  if (component) {
-    return component;
-  }
-  if (type === 'input') {
-    return <Input placeholder={placeholder}/>
-  }
-  if (type === 'textarea') {
-    return <TextArea placeholder={placeholder}/>
-  }
-  return null;
-}
-
-
-const FormForModal = ({title, width, left, right, formName, record, onFinish, fields, visible, onCancel}) => {
+const FormForModal = ({title, width, left, right, formName, record, onFinish, loading, fields, visible, onCancel}) => {
   const [form] = Form.useForm();
   const onOk = () => {
     form.validateFields().then((values) => {
@@ -32,7 +17,7 @@ const FormForModal = ({title, width, left, right, formName, record, onFinish, fi
   }
   return (
     <Modal
-      destroyOnClose
+      destroyOnClose confirmLoading={loading}
       title={title} width={width} visible={visible} onOk={onOk} onCancel={onCancel}>
       <Form
         form={form}

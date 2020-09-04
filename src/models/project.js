@@ -8,6 +8,8 @@ export default {
     data: [],
     projectName: '',
     visible: false,
+    currentProject: null,
+    projectData: {},
   },
 
   reducers: {
@@ -34,7 +36,20 @@ export default {
       }
     },
 
-    *insert({payload}, {call, put, select}) {
+    * queryProject({payload}, {call, put}) {
+      const response = yield call(projectService.fetchProjectById, payload);
+      if (validResponse(response) && response.data !== null) {
+        yield put({
+          type: 'save',
+          payload: {
+            projectData: response.data,
+            currentProject: response.data.projectName
+          }
+        })
+      }
+    },
+
+    *insert({payload}, {call, put}) {
       const response = yield call(projectService.insertProject, payload);
       if (validResponse(response)) {
         notification.success({message: response.message});

@@ -1,10 +1,11 @@
 import React, {PureComponent} from 'react';
 import {PageContainer} from '@ant-design/pro-layout';
-import {Spin, Empty, Avatar, Card, Tooltip, Upload, Row, Input, Col, Button, Select} from "antd";
+import {Spin, Empty, Avatar, Card, Tooltip, Popover, Row, Input, Col, Button, Select} from "antd";
 import {connect} from "@/.umi/plugin-dva/exports";
 import conf from '@/consts/const';
 import {QuestionCircleOutlined} from '@ant-design/icons';
-import FormForModal from "@/components/ModalForm/FormForModal";
+import FormForModal from "@/components/EagleForm/FormForModal";
+import {history} from 'umi';
 
 const {Search} = Input;
 const {Option} = Select;
@@ -47,8 +48,16 @@ export default class Project extends PureComponent {
 
   render() {
     const {data, visible} = this.props.project;
-    const {users} = this.props.user;
-    const {loading} = this.props;
+    const {users, userMap} = this.props.user;
+    const {loading, dispatch} = this.props;
+    const content = (item) => {
+      return <div>
+        <p>负责人: {userMap[item.owner]}</p>
+        <p>简介: {item.description || '无'}</p>
+        <p>更新时间: {item.updateTime}</p>
+      </div>
+    };
+
     const opt = <Select placeholder="请选择项目组长">
       {
         users.map(item => <Option value={item.value}>{item.label}</Option>)
@@ -92,7 +101,7 @@ export default class Project extends PureComponent {
         <FormForModal width={600} title="添加项目" left={6} right={18} record={{}}
                       visible={visible} onCancel={() => {
           this.onHandleModal(false)
-        }} fields={fields} onFinish={this.onHandleCreate}
+        }} fields={fields} loading={loading.effects['project/insert']} onFinish={this.onHandleCreate}
         />
         <Row gutter={8} style={{marginBottom: 16}}>
           <Col span={18}>
@@ -114,30 +123,38 @@ export default class Project extends PureComponent {
                 </Col> :
                 data.map(item =>
                   <Col span={4}>
-                    <Card hoverable bordered={false} style={{borderRadius: 16, textAlign: 'center'}}
-                          bodyStyle={{padding: 16}}>
-                      <Tooltip title="点击可修改头像">
-                        <Upload customRequest={async fileData => {
-                          await this.props.dispatch({
-                            type: 'project/uploadFile',
-                            payload: {
-                              file: fileData.file,
-                              project_id: item.id,
-                            }
-                          })
-                        }} fileList={[]}>
-                          <Avatar size={100} src={`${conf.PIC_URL}${item.avatar}`}/>
-                        </Upload>
-                      </Tooltip>
-                      <p style={{
-                        textAlign: 'center',
-                        fontWeight: 'bold',
-                        fontSize: 18,
-                        marginTop: 6
-                      }}>{item.projectName}</p>
-                      <p style={{textAlign: 'center', fontSize: 12}}>更新于 <span
-                        style={{color: '#409EFF'}}>{item.updateTime.split(" ")[1]}</span></p>
-                    </Card>
+                    <Popover content={content(item)} placement="rightTop">
+                      <Card hoverable bordered={false} style={{borderRadius: 16, textAlign: 'center'}}
+                            bodyStyle={{padding: 16}} onClick={() => {
+                        history.push(`/project/${item.id}`);
+                      }}>
+                        {/*<Tooltip title="点击可修改头像">*/}
+                        {/*<Upload customRequest={async fileData => {*/}
+                        {/*  await this.props.dispatch({*/}
+                        {/*    type: 'project/uploadFile',*/}
+                        {/*    payload: {*/}
+                        {/*      file: fileData.file,*/}
+                        {/*      project_id: item.id,*/}
+                        {/*    }*/}
+                        {/*  })*/}
+                        {/*}} fileList={[]}>*/}
+                        {
+                          item.avatar !== null ? <Avatar size={64} src={`${conf.PIC_URL}${item.avatar}`}/> :
+                            <Avatar style={{backgroundColor: '#87d068'}} size={64}
+                            >{item.projectName.slice(0, 3)}</Avatar>
+                        }
+                        {/*</Upload>*/}
+                        {/*</Tooltip>*/}
+                        <p style={{
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                          fontSize: 18,
+                          marginTop: 8
+                        }}>{item.projectName}</p>
+                        {/*<p style={{textAlign: 'center', fontSize: 12}}>更新于 <span*/}
+                        {/*  style={{color: '#409EFF'}}>{item.updateTime.split(" ")[1]}</span></p>*/}
+                      </Card>
+                    </Popover>
                   </Col>
                 )
             }

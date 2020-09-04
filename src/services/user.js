@@ -14,7 +14,7 @@ export async function queryNotices() {
 }
 
 export async function fetchUserList() {
-  return request('http://127.0.0.1:7560/api/user/list', {
+  return request('/api/user/list', {
     headers: getHeader()
   });
 }
