@@ -54,12 +54,24 @@ export default {
       if (validResponse(response)) {
         notification.success({message: response.message});
         yield put({
+          type: 'queryProject',
+          payload: {
+            projectId: payload.id,
+          }
+        })
+      }
+    },
+
+    *update({payload}, {call, put}) {
+      const response = yield call(projectService.updateProject, payload);
+      if (validResponse(response)) {
+        notification.success({message: response.message});
+        yield put({
           type: 'fetch',
           payload: {
           }
         })
       }
-
     },
 
     * uploadFile({payload}, {call, put}) {

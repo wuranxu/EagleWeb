@@ -3,7 +3,7 @@ import React from "react";
 
 const {TextArea} = Input;
 
-export default (type, placeholder, component = undefined) => {
+const getComponent = (type, placeholder, component = undefined) => {
   if (component) {
     return component;
   }
@@ -15,3 +15,5 @@ export default (type, placeholder, component = undefined) => {
   }
   return null;
 }
+
+export default getComponent;

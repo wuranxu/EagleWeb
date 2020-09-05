@@ -23,6 +23,14 @@ export async function insertProject(data) {
   });
 }
 
+export async function updateProject(data) {
+  return request('/api/project/update', {
+    data,
+    method: 'POST',
+    headers: getHeader()
+  });
+}
+
 export async function uploadProject(params) {
   const formData = new FormData();
   formData.append('file', params.file);

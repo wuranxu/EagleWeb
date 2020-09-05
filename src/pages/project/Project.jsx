@@ -49,7 +49,7 @@ export default class Project extends PureComponent {
   render() {
     const {data, visible} = this.props.project;
     const {users, userMap} = this.props.user;
-    const {loading, dispatch} = this.props;
+    const {loading} = this.props;
     const content = (item) => {
       return <div>
         <p>负责人: {userMap[item.owner]}</p>
