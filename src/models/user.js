@@ -19,7 +19,7 @@ const UserModel = {
             value: v.id,
             label: v.nickname
           });
-          map[v.id] = v.nickname;
+          map[v.id] = v;
         });
         yield put({
           type: 'save',

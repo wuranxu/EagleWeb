@@ -41,3 +41,10 @@ export async function uploadProject(params) {
     headers: getHeader()
   });
 }
+
+export async function listProjectRole({projectId}) {
+  return request(`/api/project/${projectId}/members`, {
+    headers: getHeader()
+  });
+}
+

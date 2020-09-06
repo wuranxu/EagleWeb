@@ -10,6 +10,7 @@ export default {
     visible: false,
     currentProject: null,
     projectData: {},
+    roles: [],
   },
 
   reducers: {
@@ -83,6 +84,18 @@ export default {
         })
       }
     },
+
+    * listProjectRole({payload}, {call, put}) {
+      const response = yield call(projectService.listProjectRole, payload);
+      if (validResponse(response)) {
+        yield put({
+          type: 'save',
+          payload: {
+            roles: response.data,
+          }
+        })
+      }
+    }
   }
 
 }

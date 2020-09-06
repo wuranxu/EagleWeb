@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Row, Col, Select} from 'antd';
 import CustomForm from "@/components/EagleForm/CustomForm";
 import {connect} from 'umi';

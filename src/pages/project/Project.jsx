@@ -52,7 +52,7 @@ export default class Project extends PureComponent {
     const {loading} = this.props;
     const content = (item) => {
       return <div>
-        <p>负责人: {userMap[item.owner]}</p>
+        <p>负责人: {userMap[item.owner].nickname}</p>
         <p>简介: {item.description || '无'}</p>
         <p>更新时间: {item.updateTime}</p>
       </div>
