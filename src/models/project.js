@@ -95,6 +95,18 @@ export default {
           }
         })
       }
+    },
+
+    * addRole({payload}, {call, put}) {
+      const response = yield call(projectService.addProjectRole, payload);
+      if (validResponse(response)) {
+        yield put({
+          type: 'listProjectRole',
+          payload: {
+            projectId: payload.projectId,
+          }
+        })
+      }
     }
   }
 

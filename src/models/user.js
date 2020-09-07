@@ -1,5 +1,6 @@
-import {fetchUserList} from '@/services/user';
+import {fetchUserList, registerUser} from '@/services/user';
 import validResponse from "@/utils/response";
+import {history} from 'umi';
 
 const UserModel = {
   namespace: 'user',
@@ -28,6 +29,19 @@ const UserModel = {
             userMap: map
           },
         });
+      }
+    },
+
+    * register({payload}, {call, put}) {
+      const response = yield call(registerUser, payload);
+      if (validResponse(response)) {
+        localStorage.setItem("eagle_user", JSON.stringify(response.data));
+        localStorage.setItem("eagle_token", response.data.token);
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        history.push('/user/register/result');
       }
     },
 

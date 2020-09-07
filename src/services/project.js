@@ -48,3 +48,11 @@ export async function listProjectRole({projectId}) {
   });
 }
 
+export async function addProjectRole(payload) {
+  return request(`/api/project/role/insert`, {
+    headers: getHeader(),
+    data: payload,
+    method: 'POST'
+  });
+}
+

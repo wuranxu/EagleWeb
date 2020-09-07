@@ -7,14 +7,23 @@ import CustomForm from "@/components/EagleForm/CustomForm";
 import FormForModal from "@/components/EagleForm/FormForModal";
 import getComponent from "@/components/EagleForm";
 
-const FormItem = Form.Item;
 const {Option} = Select;
 
-const ProjectRole = ({data, user, dispatch, project, loading}) => {
+const ProjectRole = ({user, dispatch, project, loading}) => {
   const params = useParams();
+  const [modal, setModal] = useState(false);
+
 
   const onFinish = (values) => {
-    console.log(values);
+    const info = {
+      ...values,
+      projectId: params.id,
+    }
+    dispatch({
+      type: 'project/addRole',
+      payload: info,
+    })
+    setModal(false);
   }
 
   useEffect(() => {
@@ -29,20 +38,21 @@ const ProjectRole = ({data, user, dispatch, project, loading}) => {
     })
   }, [])
 
-  const [modal, setModal] = useState(false);
 
   const {userMap, users} = user;
 
 
   const permission = (item) => {
     if (item.projRole === 'OWNER') {
-      return null;
+      return [<Tag color='blue'>组长</Tag>];
     }
-    return <Select value={conf.PROJECT_ROLE_MAP[item.projRole]}>
-      {
-        Object.keys(conf.PROJECT_ROLE_MAP).map(key => <Option value={key}>{conf.PROJECT_ROLE_MAP[key]}</Option>)
-      }
-    </Select>
+    return [
+      <Select style={{width: 80}} value={conf.PROJECT_ROLE_TO_ID[item.projRole]}>
+        {
+          Object.keys(conf.PROJECT_ROLE_MAP).map(key => <Option value={key}>{conf.PROJECT_ROLE_MAP[key]}</Option>)
+        }
+      </Select>
+    ]
   }
   const opt = <Select placeholder="请选择用户">
     {
@@ -65,12 +75,20 @@ const ProjectRole = ({data, user, dispatch, project, loading}) => {
       type: 'select'
     },
     {
-      name: 'projectRole',
+      name: 'projRole',
       label: '角色',
       required: true,
       component: role,
       type: 'select'
     },
+  ]
+
+  const data = [
+    {
+      userId: project.projectData.owner,
+      projRole: 'OWNER',
+    },
+    ...project.roles,
   ]
 
   return (
@@ -85,7 +103,7 @@ const ProjectRole = ({data, user, dispatch, project, loading}) => {
         <List
           itemLayout="horizontal"
           size="small"
-          dataSource={project.roles}
+          dataSource={data}
           loading={loading.effects['project/listProjectRole']}
           renderItem={item => (
             <List.Item actions={permission(item)}>
@@ -95,7 +113,6 @@ const ProjectRole = ({data, user, dispatch, project, loading}) => {
                     src={item.avatar || "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"}/>}
                   title={userMap[item.userId] ? userMap[item.userId].nickname : 'loading'}
                   description={userMap[item.userId] ? userMap[item.userId].email : 'loading'}/>
-                <Tag color={conf.PROJECT_TAG[item.projRole]}>{conf.PROJECT_ROLE[item.projRole]}</Tag>
               </Skeleton>
             </List.Item>
           )}

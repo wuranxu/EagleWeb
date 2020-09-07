@@ -34,7 +34,7 @@ const ProjectDetail = ({dispatch, project}) => {
             Content of Tab Pane 1
           </TabPane>
           <TabPane tab="成员列表" key="2">
-            <ProjectRole data={projectData}/>
+            <ProjectRole/>
           </TabPane>
           <TabPane tab="设置" key="3">
             <ProjectInfo data={projectData}/>

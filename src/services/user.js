@@ -18,3 +18,11 @@ export async function fetchUserList() {
     headers: getHeader()
   });
 }
+
+export async function registerUser(payload) {
+  return request('/api/user/register', {
+    headers: getHeader(),
+    data: payload,
+    method: 'POST'
+  });
+}
