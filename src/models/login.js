@@ -52,7 +52,8 @@ const Model = {
 
     logout() {
       const {redirect} = getPageQuery(); // Note: There may be security issues, please note
-
+      localStorage.removeItem('eagle_token');
+      localStorage.removeItem('eagle_user');
       if (window.location.pathname !== '/user/login' && !redirect) {
         history.replace({
           pathname: '/user/login',

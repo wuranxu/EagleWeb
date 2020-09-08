@@ -9,7 +9,6 @@ export default {
     OWNER: '2',
     MEMBER: '0',
     ADMIN: '1',
-
   },
   PROJECT_TAG: {
     OWNER: 'purple',

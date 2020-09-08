@@ -1,7 +1,9 @@
-import {Form, Row, Col, Button, Tooltip, Upload} from "antd";
+import {Button, Col, Form, Row, Tooltip, Upload} from "antd";
 import React from "react";
 import ProjectAvatar from "@/components/Project/ProjectAvatar";
 import {connect} from 'umi';
+import {SaveOutlined} from '@ant-design/icons';
+
 
 import getComponent from './index';
 
@@ -66,9 +68,8 @@ const CustomForm = ({left, right, formName, record, onFinish, fields, dispatch})
             labelCol: {span: 0},
             wrapperCol: {span: 24},
           }}>
-            <Button htmlType="submit" type="primary">修改</Button>
+            <Button htmlType="submit" type="primary"><SaveOutlined/>修改</Button>
           </FormItem>
-
         </Col>
         <Col span={6}/>
       </Row>
@@ -76,4 +77,4 @@ const CustomForm = ({left, right, formName, record, onFinish, fields, dispatch})
   )
 
 }
-export default connect(({project})=>({project}))(CustomForm);
+export default connect(({project}) => ({project}))(CustomForm);

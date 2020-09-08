@@ -56,3 +56,18 @@ export async function addProjectRole(payload) {
   });
 }
 
+export async function updateProjectRole(payload) {
+  return request(`/api/project/role/update`, {
+    headers: getHeader(),
+    data: payload,
+    method: 'POST'
+  });
+}
+
+export async function deleteProjectRole(payload) {
+  return request(`/api/project/role/delete`, {
+    headers: getHeader(),
+    data: payload,
+    method: 'POST'
+  });
+}

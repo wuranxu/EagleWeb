@@ -5,7 +5,7 @@
  */
 import ProLayout, {DefaultFooter} from '@ant-design/pro-layout';
 import React, {useEffect} from 'react';
-import {Link, useIntl, connect, history} from 'umi';
+import {Link, useIntl, connect, history, router} from 'umi';
 import {GithubOutlined} from '@ant-design/icons';
 import {Result, Button} from 'antd';
 import Authorized from '@/utils/Authorized';
@@ -42,12 +42,6 @@ const defaultFooterDom = (
   <DefaultFooter
     copyright={`${new Date().getFullYear()}  🎉 created by wuranxu❤️`}
     links={[
-      {
-        key: 'Eagle',
-        title: 'Eagle',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
       {
         key: 'github',
         title: <GithubOutlined/>,

@@ -50,32 +50,35 @@ export default {
       }
     },
 
-    *insert({payload}, {call, put}) {
+    * insert({payload}, {call, put}) {
       const response = yield call(projectService.insertProject, payload);
       if (validResponse(response)) {
         notification.success({message: response.message});
         yield put({
-          type: 'queryProject',
+          type: 'fetch',
+          payload: {page: 1, size: 1000}
+        })
+        yield put({
+          type: 'save',
           payload: {
-            projectId: payload.id,
+            visible: false,
           }
         })
       }
     },
 
-    *update({payload}, {call, put}) {
+    * update({payload}, {call, put}) {
       const response = yield call(projectService.updateProject, payload);
       if (validResponse(response)) {
         notification.success({message: response.message});
         yield put({
           type: 'fetch',
-          payload: {
-          }
+          payload: {}
         })
       }
     },
 
-    * uploadFile({payload}, {call, put}) {
+    * uploadFile({payload}, {call, _}) {
       const response = yield call(projectService.uploadProject, payload);
       if (validResponse(response)) {
         notification.success({
@@ -100,6 +103,9 @@ export default {
     * addRole({payload}, {call, put}) {
       const response = yield call(projectService.addProjectRole, payload);
       if (validResponse(response)) {
+        notification.success({
+          message: response.message,
+        })
         yield put({
           type: 'listProjectRole',
           payload: {
@@ -107,6 +113,27 @@ export default {
           }
         })
       }
+    },
+
+    * updateRole({payload}, {call, put}) {
+      const response = yield call(projectService.updateProjectRole, payload);
+      validResponse(response);
+      yield put({
+        type: 'listProjectRole',
+        payload: {
+          projectId: payload.projectId,
+        }
+      })
+    },
+    * deleteRole({payload}, {call, put}) {
+      const response = yield call(projectService.deleteProjectRole, payload);
+      validResponse(response);
+      yield put({
+        type: 'listProjectRole',
+        payload: {
+          projectId: payload.projectId,
+        }
+      })
     }
   }
 

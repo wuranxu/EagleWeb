@@ -5,6 +5,7 @@ import {connect, useParams} from "umi";
 import conf from "@/consts/const";
 import ProjectInfo from "@/components/Project/ProjectInfo";
 import ProjectRole from "@/components/Project/ProjectRole";
+import NProgress from "nprogress";
 
 const {TabPane} = Tabs;
 
@@ -14,6 +15,7 @@ const ProjectDetail = ({dispatch, project}) => {
   const {projectData} = project;
 
   useEffect(() => {
+    NProgress.start();
     const projectId = params.id;
     dispatch({
       type: 'project/queryProject',
@@ -21,6 +23,7 @@ const ProjectDetail = ({dispatch, project}) => {
         projectId,
       }
     })
+    NProgress.done();
   }, [])
 
   return (

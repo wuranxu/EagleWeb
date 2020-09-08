@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, List, Select, Skeleton, Tag, Button, Modal, Form} from 'antd';
+import {Avatar, Button, List, Select, Popconfirm, Skeleton, Tag} from 'antd';
 import {connect, useParams} from 'umi';
 import conf from '@/consts/const';
-import {PlusOutlined} from '@ant-design/icons';
-import CustomForm from "@/components/EagleForm/CustomForm";
+import {PlusOutlined, DeleteTwoTone} from '@ant-design/icons';
 import FormForModal from "@/components/EagleForm/FormForModal";
-import getComponent from "@/components/EagleForm";
+import NProgress from 'nprogress' // 引入nprogress插件
+import 'nprogress/nprogress.css'  // 这个nprogress样式必须引入
 
 const {Option} = Select;
 
@@ -13,6 +13,15 @@ const ProjectRole = ({user, dispatch, project, loading}) => {
   const params = useParams();
   const [modal, setModal] = useState(false);
 
+  const onUpdateRole = (item, value) => {
+    dispatch({
+      type: 'project/updateRole',
+      payload: {
+        ...item,
+        projRole: value,
+      },
+    })
+  }
 
   const onFinish = (values) => {
     const info = {
@@ -26,7 +35,15 @@ const ProjectRole = ({user, dispatch, project, loading}) => {
     setModal(false);
   }
 
+  const confirm = (item) => {
+    dispatch({
+      type: 'project/deleteRole',
+      payload: item
+    })
+  }
+
   useEffect(() => {
+    NProgress.start();
     dispatch({
       type: 'user/fetch'
     })
@@ -36,22 +53,32 @@ const ProjectRole = ({user, dispatch, project, loading}) => {
         projectId: params.id,
       }
     })
+    NProgress.done();
   }, [])
 
 
   const {userMap, users} = user;
 
-
   const permission = (item) => {
     if (item.projRole === 'OWNER') {
-      return [<Tag color='blue'>组长</Tag>];
+      return [<Tag color='blue' size="large">负责人</Tag>];
     }
     return [
-      <Select style={{width: 80}} value={conf.PROJECT_ROLE_TO_ID[item.projRole]}>
+      <Select style={{width: 80}} value={conf.PROJECT_ROLE_TO_ID[item.projRole]} onChange={(data) => {
+        onUpdateRole(item, data);
+      }}>
         {
           Object.keys(conf.PROJECT_ROLE_MAP).map(key => <Option value={key}>{conf.PROJECT_ROLE_MAP[key]}</Option>)
         }
-      </Select>
+      </Select>,
+      <Popconfirm
+        title="确定要删除该角色吗?"
+        onConfirm={()=>{confirm(item)}}
+        okText="确定"
+        cancelText="取消"
+      >
+      <DeleteTwoTone twoToneColor="red" style={{cursor: 'pointer'}}/>
+      </Popconfirm>
     ]
   }
   const opt = <Select placeholder="请选择用户">
@@ -60,7 +87,7 @@ const ProjectRole = ({user, dispatch, project, loading}) => {
     }
   </Select>
 
-  const role = <Select placeholder="请选择角色">
+  const roleList = <Select placeholder="请选择角色">
     {
       Object.keys(conf.PROJECT_ROLE_MAP).map(key => <Option value={key}>{conf.PROJECT_ROLE_MAP[key]}</Option>)
     }
@@ -78,7 +105,7 @@ const ProjectRole = ({user, dispatch, project, loading}) => {
       name: 'projRole',
       label: '角色',
       required: true,
-      component: role,
+      component: roleList,
       type: 'select'
     },
   ]
