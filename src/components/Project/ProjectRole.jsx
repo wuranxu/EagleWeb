@@ -73,11 +73,13 @@ const ProjectRole = ({user, dispatch, project, loading}) => {
       </Select>,
       <Popconfirm
         title="确定要删除该角色吗?"
-        onConfirm={()=>{confirm(item)}}
+        onConfirm={() => {
+          confirm(item)
+        }}
         okText="确定"
         cancelText="取消"
       >
-      <DeleteTwoTone twoToneColor="red" style={{cursor: 'pointer'}}/>
+        <DeleteTwoTone twoToneColor="red" style={{cursor: 'pointer'}}/>
       </Popconfirm>
     ]
   }
